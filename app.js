@@ -71,3 +71,26 @@ app.get('/lobby_data', function (req, res) {
 	}
 	res.send(lobby_tables);
 });
+
+// The 10-seat table markup
+app.get('/table_10_handed.html', function(req, res) {
+	res.render('table_10_handed');
+});
+
+// The 6-seat markup
+app.get('/table_6_handed.html', function(req, res) {
+	res.render('table_6_handed');
+});
+
+// The 2-seat table markup
+app.get('/table_2_handed.html', function(req, res) {
+	res.render('table_2_handed');
+});
+
+// The table data
+app.get('/table_data/:table_id', function(req, res) {
+	if (typeof req.params.table_id !== 'undefined' && typeof tables[req.params.table_id] !== 'undefined') {
+		tables[req.params.table_id].update_public_player_data();
+		res.send( {'table': tables[req.params.table_id].public } );
+	}
+});
