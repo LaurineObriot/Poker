@@ -125,5 +125,37 @@ io.sockets.on('connection', function( socket ) {
 			delete players[socket.id];
 		}
 	});
-	
+
+	socket.on('leave_table', function(callback){
+		// If the player was sitting on a table
+		if (players[socket.id].sitting_on_table && tables[players[socket.id].sitting_on_table]) {
+			// The seat on which the player was sitting
+			var seat = players[socket.id].seat;
+			// The table on which the player was sitting
+			var table_id = players[socket.id].sitting_on_table;
+			// Remove the player from the seat
+			tables[table_id].seats[seat] = {};
+			tables[table_id].public.no_of_players_seated--;
+			// Remove the chips from play
+			players[socket.id].chips += players[socket.id].chips_in_play;
+			players[socket.id].chips_in_play = 0;
+			players[socket.id].seat = null;
+			// Emit the new table data
+			var table_data = tables[table_id].public;
+			tables[table_id].update_public_player_data();
+			io.sockets.in( 'table-' + table_id).emit( 'players_left' table_data);
+			// Remove the player from the socket room
+			socket.leave('table' + table_id);
+			players[socket.id].sitting_on_table = false;
+			// Removing the player from the doubly linked list
+			if (players[socket.id].next_player) {
+				players[socket.id].next_player.previous_player = players[socket.id].previous_player;
+				players[socket.id].previous_player.next_player = players[socket.id].next_player;
+			}
+			callback( { 'success': true, 'total_chips': players[socket.id].chips});
+		}
+	});
+
+
+
 })
