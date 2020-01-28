@@ -67,7 +67,6 @@ app.get('/lobby_data', function (req, res) {
 			lobby_tables[table_id].big_blind = tables[table_id].public.big_blind;
 			lobby_tables[table_id].small_bling = tables[table_id].public.small_blind;
 		}
-
 	}
 	res.send(lobby_tables);
 });
@@ -143,7 +142,7 @@ io.sockets.on('connection', function( socket ) {
 			// Emit the new table data
 			var table_data = tables[table_id].public;
 			tables[table_id].update_public_player_data();
-			io.sockets.in( 'table-' + table_id).emit( 'players_left' table_data);
+			io.sockets.in( 'table-' + table_id).emit('players_left' table_data);
 			// Remove the player from the socket room
 			socket.leave('table' + table_id);
 			players[socket.id].sitting_on_table = false;
@@ -153,6 +152,25 @@ io.sockets.on('connection', function( socket ) {
 				players[socket.id].previous_player.next_player = players[socket.id].next_player;
 			}
 			callback( { 'success': true, 'total_chips': players[socket.id].chips});
+		}
+	});
+
+	socket.on('register', function(data, callback) {
+		// If the new screen name is posted
+		if (typeof data.new_screen_name !== 'undefined') {
+			var new_screen_name = data.new_screen_name.trim();
+			// If the new screen name is not an empty string
+			if (new_screen_name && typeof players[socket.id] === 'undefined') {
+				// Create the player objet
+				var player_id = socket.id + Math.ceil(Math.random() * 999999);
+				// Creating the player object
+				players[socket.id] = new Player(player_id, socket, new_screen_name, 1000);
+				callback( { success: true, screen_name; new_screen_name, total_chips: players[socket.id].chips } );
+			} else {
+				callback( {success: false} );
+			}
+		} else {
+			callback( {success: false} );
 		}
 	});
 
