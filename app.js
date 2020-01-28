@@ -174,6 +174,78 @@ io.sockets.on('connection', function( socket ) {
 		}
 	});
 
+	// When a player requests to it in
+	socket.on('sit_in', function(data, callback) {
+		if (
+			// A seat has been specified
+			typeof data.seat !== 'undefined'
+			// A table id is specified
+			&& typeof data.table_id !== 'undefined'
+			// The table exists
+			&& typeof tables[data.table_id] !== 'undefined'
+			// The seat number is an int and less than the total nimber of seats
+			&& typeof data.seat === 'number'
+			&& data.seat >= 0
+			&& data.seat < tables[data.table_id].public.no_of_seats
+			// The seat in empty
+			&& typeof tables[data.table_id].seats[data.seat].name === 'undefined'
+			// The player isn't sitting on any other tables
+			&& players[socket.id].sitting_on_table === false
+			// The chips chosen is a number
+			&& typeof data.chips !== 'undefined'
+			&& !isNaN(parseFloat(data.chips))
+			&& isFinite(data.chips)
+		){
+			// The chips the player chose are less than the total chips the player has
+			if (data.chips > players[socket.id].chips)
+				callback( { 'success': false, 'error': "You don't have that many chips!" } );
+			else if (data.chips > tables[data.table_id].public.max_buy_in || data.chips < tables[data.table_id].public.min_buy_in)
+				callback( { 'success': false, 'error': "The amount of chips shouold be between the maximum and the minimum amout of allowed buy in" } );
+			else {
+				// The data that will be sent to the view
+				var player_data = {name: players[socket.id].name, chips: data.chips};
+				// Remove the chips that player will have on the table, from the player object
+				players[socket.id].chips -= data.chips;
+				players[socket.id].chips_in_play = data.chips;
+				// Add them to the table
+				tables[data.table_id].seats[data.seat] = players[socket.id];
+				tables[data.table_id].public.no_of_players_seated++;
+				players[socket.id].seat = data.seat;
+				players[socket.id]. sitting_on_table = data.table_id;
+				// Give the response to the user
+				callback( {'success': true, 'sitting_on_table': data.table_id} );
+				// Add the player to the socket room
+				socket.join('table-' + data.table_id);
+				// Notify the table that the user has sat in
+				io.socket.in('table-' + data.table_id).emit('player_sat_in', {seat: data.seat, player: player_data});
+				// If there are no players playing right now, try to initialize a game with the new player
+				if(!tables[data.table_id].game_is_on && table[data.table_id].public.no_of_players_seated > 1) {
+					// initialize the game
+					tables[data.table_id].initialize_game();
+					tables[data.table_id].init_small_blind();
+					// Send the new table data to the player
+					tables[data.table_id].upgrade_public_player_data();
+					io.sockets.in('table-' + data.table_id).emit('tabvle_data', tables[data.table_id].public);
+					// start asking players to post the small blind
+					tables[data.table_id].player_to_act.socket.emit('post_small_blind', {'small_blind' : 10});
+				}
+			}
+		} else {
+			// If the user is not allowed to sit in, notify the user
+			callback( {'success': false} );
+		}
 
+		socket.on( 'post_blind', function(posted_blind) {
+			if (players[socket.id].sitting_on_table !== 'undefined') {
+				var table_id = players[socket.id].sitting_on_table;
+				if (tables[table_id] && tables[table_id].player_to_act.socket.id === socket.id) {
+					if (posted_blind) {
 
-})
+					} else {
+
+					}
+				}
+			}
+		});
+	});
+});
