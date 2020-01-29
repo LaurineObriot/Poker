@@ -3,29 +3,67 @@
 * depending on the replies from the server.
 */
 
-app.controller('TableController', function($scope, $rootScope, $http) {
-	$scope.lobby_tables = [];
-	$scope.new_screen_name = '';
+app.controller('TableController', function($scope, $rootScope, $http, $routeParams) {
+	$scope.table = {};
+	$scope.showing_chips_modal = false;
+	$scope.post_small_blind = false;
+	$scope.post_big_blind = false;
+	$scope.table.dealer_seat = null;
 
 	$http({
-		url: '/lobby_data',
+		url: '/table_data' + $routeParams.table_id,
 		method: 'GET'
 	}).success(function(data, status, headers, config) {
-		for (table_id in data) {
-			$scope.lobby_tables[table_id] = data[table_id]
-		}
+		$scope.table = data.table;
 	});
 
-	$scope.register = function() {
-		// If there is some trimmed value for a new screen name
-		if ($scope.new_screen_name) {
-			socket.emit('register', { 'new_screen_name': $scope.new_screen_name, 'socket_id': socket.socket.sessionid }, function(response) {
-				if (response.success) {
-					$rootScope.screen_name = response.screen_name;
-					$rootScope.total_chips = response.total_chips;
-					$rootScope.digest();
+	$scope.sit_in = function(seat) {
+		socket.emit('sit_in', {'seat': seat, 'table_id': $routeParams.table_id, 'chips': $scope.buy_in_amount}, function (response) {
+			if (response.success) {
+				$scope.show_buy_in_modal = false;
+				$rootScope.sitting_on_table = response.sitting_on_table;
+				$scope.buy_in_error = null;
+			} else {
+				if (response.error) {
+					$scope.buy_in_error = response.error;
+					$scope.$digest();
 				}
-			});
-		}
+			}
+		});
 	}
+
+	$scope.leave_table = function() {
+		socket.emit('leave_table', function(response) {
+			if (response.success) {
+				$rootScope.sitting_on_table = '';
+				$rootScope.total_chips = reponse.total_chips;
+				$rootScope.$digest();
+			}
+		});
+	}
+
+	$scope.post_blind = function(posted) {
+		socket.emit('post_blind', posted);
+	}
+
+	socket.on('table_data', function(data) {
+		$scope.table = data;
+		scope.$digest();
+	});
+
+	socket.on('player_sat_in', function(data) {
+		$scope.table.seats[data.seat].name = data.player.name;
+		$scope.table.seats[data.seat].chips = data.player.chips;
+		$scope.$digest();
+	});
+
+	socket.on('player_left', function(data) {
+		$scope.table.seats = data.seats;
+		$scope.$digest();
+	});
+
+	socket.on('post_small_blind', function(data) {
+		$scope.post_small_blind = true;
+		$scope.$digest;
+	});
 });
