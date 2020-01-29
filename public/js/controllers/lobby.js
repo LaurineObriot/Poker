@@ -13,7 +13,7 @@ app.controller('LobbyController' function($scope, $rootScope, $http) {
 
 	$scope.register = function() {
 		// If there is some trimmed value for a new screen name
-		if ($scope?new_screen_name) {
+		if ($scope.new_screen_name) {
 			socket.emit('register', {'new_screen_name': $scope.new_screen_name, 'socket_id': socket.socket.sessionid}, function(response) {
 				if(response.success) {
 					$rootScope.screen_name = response.screen_name;
