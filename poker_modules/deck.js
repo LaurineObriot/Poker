@@ -27,10 +27,9 @@ Deck.prototype.suffle = function () {
 	var suffled_deck = [];
 
 	for (var i = 0; i < 52; i++) {
-		var random_card = Math.floor(Math.random() * this.cards.length);
-		suffled_deck.push(this.cards[random_card]);
-		this.cards.splice(random_card, 1);
-	}
+		var random_card = this.cards.splice( Math.floor( Math.random() * this.cards.length ), 1 );
+		shuffled_deck = shuffled_deck.concat( random_card );
+			}
 	this.cards = suffled_deck;
 }
 
