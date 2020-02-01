@@ -43,4 +43,12 @@ Player.prototype.leave_table = function() {
 	}
 }
 
+Player.prototype.sit_out = function() {
+	if( this.sitting_on_table ) {
+		this.sitting_in = false;
+		// Remove the player from the doubly linked list
+		this.unlink();
+	}
+}
+
 module.exports = Player;
