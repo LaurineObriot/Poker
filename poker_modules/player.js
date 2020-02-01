@@ -29,6 +29,19 @@ var Player = function(id, socket, name, chips) {
 	this.previous_player = {};
 }
 
+/**
+ * Disconnects the player from the doubly linked list
+ */
+Player.prototype.unlink = function() {
+	if( this.next_player ) {
+		this.next_player.previous_player = this.previous_player;
+		this.previous_player.next_player = this.next_player;
+	}
+}
+
+/**
+ * Updates the player data when they leave the table
+ */
 Player.prototype.leave_table = function() {
 	if( this.sitting_on_table ) {
 		// Remove the chips from play
@@ -43,6 +56,9 @@ Player.prototype.leave_table = function() {
 	}
 }
 
+/**
+ * Updates the player data when they sit out
+ */
 Player.prototype.sit_out = function() {
 	if( this.sitting_on_table ) {
 		this.sitting_in = false;
