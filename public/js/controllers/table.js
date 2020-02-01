@@ -6,9 +6,9 @@
 app.controller('TableController', function($scope, $rootScope, $http, $routeParams) {
 	$scope.table = {};
 	$scope.showing_chips_modal = false;
-	$scope.post_small_blind = false;
-	$scope.post_big_blind = false;
+	$scope.action_state = '';
 	$scope.table.dealer_seat = null;
+	$rootScope.sitting_on_table = null;
 
 	$http({
 		url: '/table_data' + $routeParams.table_id,
@@ -35,9 +35,12 @@ app.controller('TableController', function($scope, $rootScope, $http, $routePara
 	$scope.leave_table = function() {
 		socket.emit('leave_table', function(response) {
 			if (response.success) {
-				$rootScope.sitting_on_table = '';
+				$rootScope.sitting_on_table = null;
 				$rootScope.total_chips = reponse.total_chips;
+				$rootScope.sitting_in = false;
+				$rootScope.action_state = '';
 				$rootScope.$digest();
+				$scope.$digest();
 			}
 		});
 	}
