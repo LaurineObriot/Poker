@@ -198,3 +198,54 @@ Table.prototype.findPreviousPlayer = function( offset, status ) {
 
 	return null;
 };
+
+/**
+ * Method that starts a new game
+ */
+Table.prototype.initializeRound = function( changeDealer ) {
+	changeDealer = typeof changeDealer == 'undefined' ? true : changeDealer ;
+
+	if( this.playersSittingInCount > 1 ) {
+		// The game is on now
+		this.gameIsOn = true;
+		this.public.board = ['', '', '', '', ''];
+		this.deck.shuffle();
+		this.headsUp = this.playersSittingInCount === 2;
+		this.playersInHandCount = 0;
+
+		for( var i=0 ; i<this.public.seatsCount ; i++ ) {
+			// If a player is sitting on the current seat
+			if( this.seats[i] !== null && this.seats[i].public.sittingIn ) {
+				if( !this.seats[i].public.chipsInPlay ) {
+					this.seats[seat].sitOut();
+					this.playersSittingInCount--;
+				} else {
+					this.playersInHandCount++;
+					this.seats[i].prepareForNewRound();
+				}
+			}
+		}
+
+		// Giving the dealer button to a random player
+		if( this.public.dealerSeat === null ) {
+			var randomDealerSeat = Math.ceil( Math.random() * this.playersSittingInCount );
+			var playerCounter = 0;
+			var i = -1;
+
+			// Assinging the dealer button to the random player
+			while( playerCounter !== randomDealerSeat && i < this.public.seatsCount ) {
+				i++;
+				if( this.seats[i] !== null && this.seats[i].public.sittingIn ) {
+					playerCounter++;
+				}
+			}
+			this.public.dealerSeat = i;
+		} else if( changeDealer || this.seats[this.public.dealerSeat].public.sittingIn === false ) {
+			// If the dealer should be changed because the game will start with a new player
+			// or if the old dealer is sitting out, give the dealer button to the next player
+			this.public.dealerSeat = this.findNextPlayer( this.public.dealerSeat );
+		}
+
+		this.initializeSmallBlind();
+	}
+};
