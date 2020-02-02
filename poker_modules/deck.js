@@ -249,3 +249,23 @@ Table.prototype.initializeRound = function( changeDealer ) {
 		this.initializeSmallBlind();
 	}
 };
+
+/**
+ * Method that starts the "small blind" round
+ */
+Table.prototype.initializeSmallBlind = function() {
+	// Set the table phase to 'smallBlind'
+	this.public.phase = 'smallBlind';
+
+	// If it's a heads up match, the dealer posts the small blind
+	if( this.headsUp ) {
+		this.public.activeSeat = this.public.dealerSeat;
+	} else {
+		this.public.activeSeat = this.findNextPlayer( this.public.dealerSeat );
+	}
+	this.lastPlayerToAct = 10;
+
+	// Start asking players to post the small blind
+	this.seats[this.public.activeSeat].socket.emit('postSmallBlind');
+	this.emitEvent( 'table-data', this.public );
+};
