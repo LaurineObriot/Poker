@@ -10,7 +10,7 @@
     "url" : "https://github.com/LaurineObriot/Poker"
   },
   "dependencies": {
-    "express": "~3.4.7",
+    "express": "~4.17.1",
     "jade": "~1.7.0",
     "less": "~2.0.0",
     "less-middleware": "~1.0.4",
