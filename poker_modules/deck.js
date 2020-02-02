@@ -90,3 +90,57 @@ Table.prototype.emitEvent = function( eventName, eventData ){
 		notification: ''
 	});
 };
+
+/**
+ * Finds the next player of a certain status on the table
+ * @param  number offset (the seat where search begins)
+ * @param  string|array status (the status of the player who should be found)
+ * @return number|null
+ */
+Table.prototype.findNextPlayer = function( offset, status ) {
+	offset = typeof offset !== 'undefined' ? offset : this.public.activeSeat;
+	status = typeof status !== 'undefined' ? status : 'inHand';
+
+	if( status instanceof Array ) {
+		var statusLength = status.length;
+		if( offset !== this.public.seatsCount ) {
+			for( var i=offset+1 ; i<this.public.seatsCount ; i++ ) {
+				if( this.seats[i] !== null ) {
+					var validStatus = true;
+					for( var j=0 ; j<statusLength ; j++ ) {
+						validStatus &= !!this.seats[i].public[status[j]];
+					}
+					if( validStatus ) {
+						return i;
+					}
+				}
+			}
+		}
+		for( var i=0 ; i<=offset ; i++ ) {
+			if( this.seats[i] !== null ) {
+				var validStatus = true;
+				for( var j=0 ; j<statusLength ; j++ ) {
+					validStatus &= !!this.seats[i].public[status[j]];
+				}
+				if( validStatus ) {
+					return i;
+				}
+			}
+		}
+	} else {
+		if( offset !== this.public.seatsCount ) {
+			for( var i=offset+1 ; i<this.public.seatsCount ; i++ ) {
+				if( this.seats[i] !== null && this.seats[i].public[status] ) {
+					return i;
+				}
+			}
+		}
+		for( var i=0 ; i<=offset ; i++ ) {
+			if( this.seats[i] !== null && this.seats[i].public[status] ) {
+				return i;
+			}
+		}
+	}
+
+	return null;
+};
