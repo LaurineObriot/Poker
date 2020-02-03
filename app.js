@@ -17,8 +17,8 @@ app.use(lessMiddleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Development Only
-if ( 'development' == app.get('env') ) {
-	app.use( express.errorHandler() );
+if ('development' == app.get('env')) {
+	app.use( express.errorHandler());
 }
 
 var players = [];
@@ -81,7 +81,7 @@ io.sockets.on('connection', function( socket ) {
 	 * @param object table-data
 	 */
 	socket.on('enterRoom', function( tableId ) {
-		if( typeof players[socket.id] !== 'undefined' && players[socket.id].room === null ) {
+		if ( typeof players[socket.id] !== 'undefined' && players[socket.id].room === null ) {
 			// Add the player to the socket room
 			socket.join( 'table-' + tableId );
 			// Add the room to the player's data
@@ -93,7 +93,7 @@ io.sockets.on('connection', function( socket ) {
 	 * When a player leaves a room
 	 */
 	socket.on('leaveRoom', function() {
-		if( typeof players[socket.id] !== 'undefined' && players[socket.id].room !== null && players[socket.id].sittingOnTable === false ) {
+		if ( typeof players[socket.id] !== 'undefined' && players[socket.id].room !== null && players[socket.id].sittingOnTable === false ) {
 			// Remove the player from the socket room
 			socket.leave( 'table-' + players[socket.id].room );
 			// Remove the room to the player's data
@@ -106,9 +106,9 @@ io.sockets.on('connection', function( socket ) {
 	 */
 	socket.on('disconnect', function() {
 		// If the socket points to a player object
-		if( typeof players[socket.id] !== 'undefined' ) {
+		if ( typeof players[socket.id] !== 'undefined' ) {
 			// If the player was sitting on a table
-			if( players[socket.id].sittingOnTable !== false && typeof tables[players[socket.id].sittingOnTable] !== 'undefined' ) {
+			if ( players[socket.id].sittingOnTable !== false && typeof tables[players[socket.id].sittingOnTable] !== 'undefined' ) {
 				// The seat on which the player was sitting
 				var seat = players[socket.id].seat;
 				// The table on which the player was sitting
@@ -127,7 +127,7 @@ io.sockets.on('connection', function( socket ) {
 	 */
 	socket.on('leaveTable', function( callback ) {
 		// If the player was sitting on a table
-		if( players[socket.id].sittingOnTable !== false && tables[players[socket.id].sittingOnTable] !== false ) {
+		if ( players[socket.id].sittingOnTable !== false && tables[players[socket.id].sittingOnTable] !== false ) {
 			// The seat on which the player was sitting
 			var seat = players[socket.id].seat;
 			// The table on which the player was sitting
@@ -143,21 +143,21 @@ io.sockets.on('connection', function( socket ) {
 	 * When a new player enters the application
 	 * @param string newScreenName
 	 * @param function callback
-	 */
+	*/
 	socket.on('register', function( newScreenName, callback ) {
 		// If a new screen name is posted
-		if( typeof newScreenName !== 'undefined' ) {
+		if (typeof newScreenName !== 'undefined') {
 			var newScreenName = newScreenName.trim();
 			// If the new screen name is not an empty string
-			if( newScreenName && typeof players[socket.id] === 'undefined' ) {
+			if ( newScreenName && typeof players[socket.id] === 'undefined' ) {
 				var nameExists = false;
-				for( var i in players ) {
+				for (var i in players) {
 					if( players[i].public.name && players[i].public.name == newScreenName ) {
 						nameExists = true;
 						break;
 					}
 				}
-				if( !nameExists ) {
+				if (!nameExists) {
 					// Creating the player object
 					players[socket.id] = new Player( socket, newScreenName, 1000 );
 					callback( { 'success': true, screenName: newScreenName, totalChips: players[socket.id].chips } );
@@ -177,7 +177,7 @@ io.sockets.on('connection', function( socket ) {
 	 * @param function callback
 	 */
 	socket.on('sitOnTheTable', function( data, callback ) {
-		if(
+		if (
 			// A seat has been specified
 			typeof data.seat !== 'undefined'
 			// A table id is specified
@@ -201,11 +201,11 @@ io.sockets.on('connection', function( socket ) {
 			&& isFinite(data.chips)
 			// The chips number is an integer
 			&& data.chips % 1 === 0
-		){
+		) {
 			// The chips the player chose are less than the total chips the player has
-			if( data.chips > players[socket.id].chips )
+			if ( data.chips > players[socket.id].chips )
 				callback( { 'success': false, 'error': 'You don\'t have that many chips' } );
-			else if( data.chips > tables[data.tableId].public.maxBuyIn || data.chips < tables[data.tableId].public.minBuyIn )
+			else if ( data.chips > tables[data.tableId].public.maxBuyIn || data.chips < tables[data.tableId].public.minBuyIn )
 				callback( { 'success': false, 'error': 'The amount of chips should be between the maximum and the minimum amount of allowed buy in' } );
 			else {
 				// Give the response to the user
@@ -224,7 +224,7 @@ io.sockets.on('connection', function( socket ) {
 	 * @param function callback
 	 */
 	socket.on('sitIn', function( callback ) {
-		if( players[socket.id].sittingOnTable !== false && players[socket.id].seat !== null && !players[socket.id].public.sittingIn ) {
+		if ( players[socket.id].sittingOnTable !== false && players[socket.id].seat !== null && !players[socket.id].public.sittingIn ) {
 			// Getting the table id from the player object
 			var tableId = players[socket.id].sittingOnTable;
 			tables[tableId].playerSatIn( players[socket.id].seat );
@@ -237,19 +237,19 @@ io.sockets.on('connection', function( socket ) {
 	 * @param bool postedBlind (Shows if the user posted the blind or not)
 	 * @param function callback
 	 */
-	socket.on('postBlind', function( postedBlind, callback ) {
-		if( players[socket.id].sittingOnTable !== false ) {
+	socket.on('postBlind', function(postedBlind, callback) {
+		if ( players[socket.id].sittingOnTable !== false ) {
 			var tableId = players[socket.id].sittingOnTable;
 			var activeSeat = tables[tableId].public.activeSeat;
 
-			if( tables[tableId]
+			if (tables[tableId]
 				&& typeof tables[tableId].seats[activeSeat].public !== 'undefined'
 				&& tables[tableId].seats[activeSeat].socket.id === socket.id
 				&& ( tables[tableId].public.phase === 'smallBlind' || tables[tableId].public.phase === 'bigBlind' )
 			) {
-				if( postedBlind ) {
-					callback( { 'success': true } );
-					if( tables[tableId].public.phase === 'smallBlind' ) {
+				if (postedBlind) {
+					callback({ 'success': true });
+					if (tables[tableId].public.phase === 'smallBlind') {
 						// The player posted the small blind
 						tables[tableId].playerPostedSmallBlind();
 					} else {
@@ -257,7 +257,7 @@ io.sockets.on('connection', function( socket ) {
 						tables[tableId].playerPostedBigBlind();
 					}
 				} else {
-					tables[tableId].playerSatOut( players[socket.id].seat );
+					tables[tableId].playerSatOut(players[socket.id].seat);
 					callback( { 'success': true } );
 				}
 			}
@@ -269,11 +269,11 @@ io.sockets.on('connection', function( socket ) {
 	 * @param function callback
 	 */
 	socket.on('check', function( callback ){
-		if( players[socket.id].sittingOnTable !== 'undefined' ) {
+		if (players[socket.id].sittingOnTable !== 'undefined') {
 			var tableId = players[socket.id].sittingOnTable;
 			var activeSeat = tables[tableId].public.activeSeat;
 
-			if( tables[tableId]
+			if (tables[tableId]
 				&& tables[tableId].seats[activeSeat].socket.id === socket.id
 				&& !tables[tableId].public.biggestBet || ( tables[tableId].public.phase === 'preflop' && tables[tableId].public.biggestBet === players[socket.id].public.bet )
 				&& ['preflop','flop','turn','river'].indexOf(tables[tableId].public.phase) > -1
@@ -290,11 +290,11 @@ io.sockets.on('connection', function( socket ) {
 	 * @param function callback
 	 */
 	socket.on('fold', function( callback ){
-		if( players[socket.id].sittingOnTable !== false ) {
+		if ( players[socket.id].sittingOnTable !== false ) {
 			var tableId = players[socket.id].sittingOnTable;
 			var activeSeat = tables[tableId].public.activeSeat;
 
-			if( tables[tableId] && tables[tableId].seats[activeSeat].socket.id === socket.id && ['preflop','flop','turn','river'].indexOf(tables[tableId].public.phase) > -1 ) {
+			if ( tables[tableId] && tables[tableId].seats[activeSeat].socket.id === socket.id && ['preflop','flop','turn','river'].indexOf(tables[tableId].public.phase) > -1 ) {
 				// Sending the callback first, because the next functions may need to send data to the same player, that shouldn't be overwritten
 				callback( { 'success': true } );
 				tables[tableId].playerFolded();
@@ -306,12 +306,12 @@ io.sockets.on('connection', function( socket ) {
 	 * When a player calls
 	 * @param function callback
 	 */
-	socket.on('call', function( callback ){
-		if( players[socket.id].sittingOnTable !== 'undefined' ) {
+	socket.on('call', function(callback){
+		if (players[socket.id].sittingOnTable !== 'undefined') {
 			var tableId = players[socket.id].sittingOnTable;
 			var activeSeat = tables[tableId].public.activeSeat;
 
-			if( tables[tableId] && tables[tableId].seats[activeSeat].socket.id === socket.id && tables[tableId].public.biggestBet && ['preflop','flop','turn','river'].indexOf(tables[tableId].public.phase) > -1 ) {
+			if ( tables[tableId] && tables[tableId].seats[activeSeat].socket.id === socket.id && tables[tableId].public.biggestBet && ['preflop','flop','turn','river'].indexOf(tables[tableId].public.phase) > -1 ) {
 				// Sending the callback first, because the next functions may need to send data to the same player, that shouldn't be overwritten
 				callback( { 'success': true } );
 				tables[tableId].playerCalled();
@@ -324,18 +324,18 @@ io.sockets.on('connection', function( socket ) {
 	 * @param number amount
 	 * @param function callback
 	 */
-	socket.on('bet', function( amount, callback ){
-		if( players[socket.id].sittingOnTable !== 'undefined' ) {
+	socket.on('bet', function(amount, callback){
+		if ( players[socket.id].sittingOnTable !== 'undefined' ) {
 			var tableId = players[socket.id].sittingOnTable;
 			var activeSeat = tables[tableId].public.activeSeat;
 
-			if( tables[tableId] && tables[tableId].seats[activeSeat].socket.id === socket.id && !tables[tableId].public.biggestBet && ['preflop','flop','turn','river'].indexOf(tables[tableId].public.phase) > -1 ) {
+			if ( tables[tableId] && tables[tableId].seats[activeSeat].socket.id === socket.id && !tables[tableId].public.biggestBet && ['preflop','flop','turn','river'].indexOf(tables[tableId].public.phase) > -1 ) {
 				// Validating the bet amount
-				amount = parseInt( amount );
+				amount = parseInt(amount);
 				if ( amount && isFinite( amount ) && amount <= tables[tableId].seats[activeSeat].public.chipsInPlay ) {
 					// Sending the callback first, because the next functions may need to send data to the same player, that shouldn't be overwritten
 					callback( { 'success': true } );
-					tables[tableId].playerBetted( amount );
+					tables[tableId].playerBetted(amount);
 				}
 			}
 		}
@@ -345,12 +345,12 @@ io.sockets.on('connection', function( socket ) {
 	 * When a player raises
 	 * @param function callback
 	 */
-	socket.on('raise', function( amount, callback ){
-		if( players[socket.id].sittingOnTable !== 'undefined' ) {
+	socket.on('raise', function(amount, callback){
+		if ( players[socket.id].sittingOnTable !== 'undefined' ) {
 			var tableId = players[socket.id].sittingOnTable;
 			var activeSeat = tables[tableId].public.activeSeat;
 
-			if(
+			if (
 				// The table exists
 				typeof tables[tableId] !== 'undefined'
 				// The player who should act is the player who raised
@@ -362,14 +362,14 @@ io.sockets.on('connection', function( socket ) {
 				// Not every other player is all in (in which case the only move is "call")
 				&& !tables[tableId].otherPlayersAreAllIn()
 			) {
-				amount = parseInt( amount );
-				if ( amount && isFinite( amount ) ) {
+				amount = parseInt(amount);
+				if (amount && isFinite(amount)) {
 					amount -= tables[tableId].seats[activeSeat].public.bet;
-					if( amount <= tables[tableId].seats[activeSeat].public.chipsInPlay ) {
+					if ( amount <= tables[tableId].seats[activeSeat].public.chipsInPlay ) {
 						// Sending the callback first, because the next functions may need to send data to the same player, that shouldn't be overwritten
-						callback( { 'success': true } );
+						callback({'success': true});
 						// The amount should not include amounts previously betted
-						tables[tableId].playerRaised( amount );
+						tables[tableId].playerRaised(amount);
 					}
 				}
 			}
@@ -382,7 +382,7 @@ io.sockets.on('connection', function( socket ) {
 	 */
 	socket.on('sendMessage', function( message ) {
 		message = message.trim();
-		if( message && players[socket.id].room ) {
+		if ( message && players[socket.id].room ) {
 			socket.broadcast.to( 'table-' + players[socket.id].room ).emit( 'receiveMessage', { 'message': htmlEntities( message ), 'sender': players[socket.id].public.name } );
 		}
 	});
