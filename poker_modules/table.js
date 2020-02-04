@@ -301,3 +301,35 @@ Table.prototype.InitializePreflop = function() {
 /**
 * Method that starts the next phase of the round
 */
+Table.prototype.initializeNextPhase = function() {
+	switch(this.public.phase) {
+		case 'preflop':
+			this.public.phase = 'flop';
+			this.public.board = this.deck.deal(3).concat(( ['', ''] );
+			break;
+		case 'flop':
+			this.public.phase = 'turn';
+			this.public.board[3] = this.deck.deal(1)[0];
+			break;
+		case 'turn':
+			this.public.phase = 'river';
+			this.public.board[4] = this.deck.deal(1)[0];
+			break
+	}
+
+	this.pot.addTableBets(this.seats);
+	this.public.biggestBet = 0;
+	this.public.activeSeat = this.findNextPlayer(this.public.dealerSeat);
+	this.lastPlayerToAct = this.findPreviousPlayer(his.public.activeSeat);
+	this.emitEvent('table-data', this.public);
+
+	// If all other players are all in, there should be no actions. Move to the next round
+	if (this.otherPlayersAreAllIn()) {
+		var that = this;
+		set setTimeout(function () {
+			that.endPhase();
+		}, 1000);
+	} else {
+		this.seats[this.public.activeSeat].socket.emit('actNotBetterPot');
+	}
+};
