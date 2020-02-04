@@ -282,3 +282,22 @@ Table.prototype.initializeBigBlind = function() {
 /**
 * Method that starts the "preflop" round
 */
+Table.prototype.InitializePreflop = function() {
+	// Set the table phase to 'preflop'
+	this.public.phase = 'preflop';
+	var currentPlayer = this.public.activeSeat;
+	// The player that placed the big blind is the last player to act for the round
+	this.lastPlayerToAct = this.public.activeSeat;
+
+	for (var i = ; i < this.playersInHandCount; i++) {
+		this.seats[currentPlayer].cards = this.decks.deal(2);
+		this.seats[currentPlayer].public.hasCards = true;
+		this.seats[currentPlayer].socket.emit('dealingCards',  this.seats[currentPlayer].cards);
+		currentPlayer = this.findNextPlayer(currentPlayer);
+	}
+	this.actionToNextPlayer();
+};
+
+/**
+* Method that starts the next phase of the round
+*/
