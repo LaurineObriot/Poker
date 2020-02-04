@@ -333,3 +333,42 @@ Table.prototype.initializeNextPhase = function() {
 		this.seats[this.public.activeSeat].socket.emit('actNotBetterPot');
 	}
 };
+
+/**
+* Making the next player the active one
+*/
+Table.prototype.actionToNextPlayer = function() {
+	this.public.activeSeat = this.findNextPlayer(this.public.activeSeat, ['chipsInPlay', 'inHand'] );
+
+	switch(this.public.phase) {
+		case 'smallBlind':
+			this.seats[this.public.activeSeat].socket.emit('postSmallBlind');
+			break;
+		case 'bigBlind':
+			this.seats[this.public.activeSeat].socket.emit('postBigBlind');
+			break;
+		case 'preflop':
+			if (this.otherPlayersAreAllIn()) {
+				this.seats[this.public.activeSeat].socket.emit('actOthersAllIn');
+			} else {
+				this.seats[this.public.activeSeat].socket.emit('actBettedPot');
+			}
+			break;
+		case 'flop':
+		case 'turn':
+		case 'river':
+		// If someone has betted
+		if( this.public.biggestBet ) {
+			if( this.otherPlayersAreAllIn() ) {
+				this.seats[this.public.activeSeat].socket.emit( 'actOthersAllIn' );
+			} else {
+				this.seats[this.public.activeSeat].socket.emit( 'actBettedPot' );
+			}
+		} else {
+			this.seats[this.public.activeSeat].socket.emit( 'actNotBettedPot' );
+		}
+		break;
+	}
+	this.emitEvent( 'table-data', this.public );
+
+};
