@@ -269,3 +269,16 @@ Table.prototype.initializeSmallBlind = function() {
 	this.seats[this.public.activeSeat].socket.emit('postSmallBlind');
 	this.emitEvent( 'table-data', this.public );
 };
+
+/**
+* Method that starts the big blind round
+*/
+Table.prototype.initializeBigBlind = function() {
+	// Set the table phase to 'bigBlind'
+	this.public.phase = 'bigBlind';
+	this.actionToNextPlayer();
+};
+
+/**
+* Method that starts the "preflop" round
+*/
