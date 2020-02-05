@@ -491,3 +491,22 @@ Table.prototype/playerFolded = function() {
 		}
 	}
 };
+
+/**
+* When a player checks
+*/
+Table.prototype.playerChecked = function() {
+	this.log({
+		message: this.seats[this.public.activeSeat].public.name + ' checked',
+		action: 'check',
+		seat: this.public.activeSeat,
+		notification: 'Check'
+	});
+	this.emitEvent('table-data', this.public);
+
+	if (this.lastPlayerToAct === this.public.activeSeat) {
+		this.endPhase;
+	} else {
+		this.actionToNextPlayer();
+	}
+};
