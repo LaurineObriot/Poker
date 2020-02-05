@@ -462,3 +462,32 @@ Table.prototype.playerPostedBigBlind = function() {
 	this.emitEvent('table-data', this.public);
 	this.InitializePreflop();
 };
+
+/**
+* Checks if the oround should continue after a player has folded
+*/
+Table.prototype/playerFolded = function() {
+	this.seats[this.public.activeSeat].fold();
+	this.log ({
+		message: this.seats[this.public.activeSeat].public.name + ' folded',
+		action: 'fold',
+		seat: this.public.activeSeat,
+		notification: 'Fold'
+	});
+	this.emitEvent('table-data', this.public);
+
+	this.playersInHandCount--;
+	this.pot.removePlayer(his.public.activeSeat);
+	if (this.playersInHandCount <= 1) {
+		this.pot.addTableBets(this.seats);
+		var winnerSeat = this.findNextPlayer();
+		this.pot.giveToWinner(this.seats[winnersSeat]);
+		this.endRound;
+	} else {
+		if (this.playersInHandCount <= 1) {
+			this.endPhase;
+		} else {
+			this.actionToNextPlayer();
+		}
+	}
+};
