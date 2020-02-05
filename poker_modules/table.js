@@ -410,3 +410,19 @@ Table.prototype.showdown = function() {
 		that.endRound();
 	}, 2000 );
 };
+
+/**
+ * Ends the current phase of the round
+ */
+Table.prototype.endPhase = function() {
+	switch( this.public.phase ) {
+		case 'preflop':
+		case 'flop':
+		case 'turn':
+			this.initializeNextPhase();
+			break;
+		case 'river':
+			this.showdown();
+			break;
+	}
+};
