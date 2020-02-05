@@ -444,3 +444,21 @@ Table.prototype.playerPostedSmallBlind = function() {
 	this.emitEvent('table-data', this.public);
 	this.initializeBigBlind();
 };
+
+/**
+* When a player posts the big blind
+* @param itn seat
+*/
+Table.prototype.playerPostedBigBlind = function() {
+	var bet = this.seat[this.public.activeSeat].public.chipsInPlay >= this.public.bigBlind ? this.public.bigBlind : this.seats[this.public.activeSeat].public.chipsInPlay;
+	this.seats[this.public.activeSeat].bet(bet);
+	this.log({
+		message: this.seats[this.public.activeSeat].public.name + ' posted the big blind',
+		action: 'bet',
+		seat: this.public.activeSeat,
+		notification: 'Posted blind'
+	});
+	this.public.biggestBet = this.public.biggest < bet ? bet : this.public.biggestBet,
+	this.emitEvent('table-data', this.public);
+	this.InitializePreflop();
+};
