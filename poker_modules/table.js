@@ -510,3 +510,25 @@ Table.prototype.playerChecked = function() {
 		this.actionToNextPlayer();
 	}
 };
+
+/**
+* When a player calls
+*/
+Table.prototype.playerCalled = function() {
+	var calledAmount = this.public.biggestBet - this.seats[this.public.activeSeat].public.bet;
+	this.seats[this.activeSeat].bet(calledAmount);
+
+	this.log({
+		message: this.seats[this.public.activeSeat].public.name + ' called',
+		action: 'call',
+		seat: this.public.activeSeat,
+		notification: 'Call'
+	});
+	this.emitEvent('table-data', this.public);
+
+	if (this.lastPlayerToAct === this.public.activeSeat || this.otherPlayersAreAllIn()) {
+		this.endPhase();
+	} else {
+		this.actionToNextPlayer();
+	}
+};
