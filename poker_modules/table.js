@@ -372,3 +372,41 @@ Table.prototype.actionToNextPlayer = function() {
 	this.emitEvent( 'table-data', this.public );
 
 };
+
+/**
+ * The phase when the players show their hands until a winner is found
+ */
+Table.prototype.showdown = function() {
+	this.pot.addTableBets( this.seats );
+
+	var currentPlayer = this.findNextPlayer( this.public.dealerSeat );
+	var bestHandRating = 0;
+
+	for( var i=0 ; i<this.playersInHandCount ; i++ ) {
+		this.seats[currentPlayer].evaluateHand( this.public.board );
+		// If the hand of the current player is the best one yet,
+		// he has to show it to the others in order to prove it
+		if( this.seats[currentPlayer].evaluatedHand.rating > bestHandRating ) {
+			this.seats[currentPlayer].public.cards = this.seats[currentPlayer].cards;
+		}
+		currentPlayer = this.findNextPlayer( currentPlayer );
+	}
+
+	var messages = this.pot.destributeToWinners( this.seats, currentPlayer );
+
+	var messagesCount = messages.length;
+	for( var i=0 ; i<messagesCount ; i++ ) {
+		this.log({
+			message: messages[i],
+			action: '',
+			seat: '',
+			notification: ''
+		});
+		this.emitEvent( 'table-data', this.public );
+	}
+
+	var that = this;
+	setTimeout( function(){
+		that.endRound();
+	}, 2000 );
+};
