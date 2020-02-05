@@ -426,3 +426,21 @@ Table.prototype.endPhase = function() {
 			break;
 	}
 };
+
+/**
+* When a player posts the small blind
+* @param int seat
+*/
+Table.prototype.playerPostedSmallBlind = function() {
+	var bet = this.seats[this.public.activeSeat].public.chipsInPlay >= this.public.smallBlind ? this.public.smallBlind : this.seats[this.public.activeSeat].public.chipsInPlay;
+	this.seats[this.public.activeSeat].bet(bet);
+	this.log({
+		message: this.seats[this.public.activeSeat].public.name + ' posted the small blind',
+		action: 'bet',
+		seat: this.public.activeSeat,
+		notification: 'Posted blind'
+	});
+	this.public.biggestBet = this.public.biggestBet < bet ? bet : this.public.biggestBet;
+	this.emitEvent('table-data', this.public);
+	this.initializeBigBlind();
+};
