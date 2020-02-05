@@ -464,7 +464,7 @@ Table.prototype.playerPostedBigBlind = function() {
 };
 
 /**
-* Checks if the oround should continue after a player has folded
+* Checks if the round should continue after a player has folded
 */
 Table.prototype/playerFolded = function() {
 	this.seats[this.public.activeSeat].fold();
