@@ -556,3 +556,28 @@ Table.prototype.playerBetted = function(amount) {
 		this.actionToNextPlayer();
 	}
 };
+
+/**
+* When a player raises
+*/
+Table.prototype.playerRaised = function(amount) {
+	this.seats[this.public.activeSeat].raise(amount);
+	var oldBiggestBet = this.public.biggestBet;*
+	this.public.biggestBet = this.public.biggestBet < this.seats[this.public.activeSeat].public.bet ? this.seats[this.public.activeSeat].public.bet : this.public.biggestBet;
+	var raiseAmount = this.public.biggestBet - oldBiggestBet;
+	this.log({
+		message: this.seats[this.public.activeSeat].public.name + 'raised to' + this.public.biggestBet,
+		action: 'raise',
+		seat: this.public.activeSeat,
+		notification: 'Raise' + raiseAmount
+	});
+	this.emitEvent('table-data', this.public)
+
+	var previousPlayer = this.findPreviousPlayer();
+	if (previousPlayerSeat === this.public.activeSeat) {
+		this.endPhase();
+	} else {
+		this.lastPlayerToAct = previousPlayerSeat;
+		this.actionToNextPlayer();
+	}
+}
