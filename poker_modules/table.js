@@ -532,3 +532,27 @@ Table.prototype.playerCalled = function() {
 		this.actionToNextPlayer();
 	}
 };
+
+/**
+* When a player bets
+*/
+Table.prototype.playerBetted = function(amount) {
+	this.seats[this.activeSeat].bet(amount);
+	this.public.biggestBet = this.public.biggestBet < this.seats[this.public.activeSeat].public.bet ? this.seats[this.public.activeSeat].public.bet : this.public.biggestBet;
+
+	this.log({
+		message: this.seats[this.public.activeSeat].public.name + 'betted' + amount,
+		action: 'bet',
+		seat: this.public.activeSeat,
+		notification: 'Bet' + amount
+	});
+	this.emitEvent('table-data', this.public);
+
+	var previousPlayerSeat = this.findPreviousPlayer();
+	if (previousPlayerSeat === this.public.activeSeat) {
+		this.endPhase();
+	} else {
+		this.lastPlayerToAct = previousPlayerSeat;
+		this.actionToNextPlayer();
+	}
+};
