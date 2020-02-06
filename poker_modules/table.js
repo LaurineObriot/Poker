@@ -598,3 +598,29 @@ Table.prototype.playerSatOnTheTable = function(player, seat, chips) {
 
 	this.playerSatIn(seat);
 };
+
+/**
+ * Adds a player who is sitting on the table, to the game
+ * @param int seat
+ */
+Table.prototype.playerSatIn = function(seat) {
+	this.log ({
+		message: this.seats[seat].public.name + ' sat in',
+		action: '',
+		seat: '',
+		notification: ''
+	});
+	this.emitEvent('table-data', this.public);
+
+	// The player is sitting in
+	this.seats[seat].public.sittingIn = true;
+	this.playersSittingInCount++;
+
+	this.emitEvent('table-data', this.public);
+
+	// If there are no players playing right now, try to initialize a game with the new player
+	if (!this.gameIsOn && this.playersSittingInCount > 1) {
+		// Initialize the game
+		this.initializeRound( false );
+	}
+};
