@@ -580,4 +580,21 @@ Table.prototype.playerRaised = function(amount) {
 		this.lastPlayerToAct = previousPlayerSeat;
 		this.actionToNextPlayer();
 	}
-}
+};
+
+/**
+* Adds the player to the table
+* @param obect player
+* @param int seat
+*/
+Table.prototype.playerSatOnTheTable = function(player, seat, chips) {
+	this.seats[seat] = player;
+	this.public.seats[seat] = player.public;
+
+	this.seats[seat].sitOnTheTable(this.public.id, seat, chips);
+
+	// Increase the counters of the table
+	this.public.playersSeatedCount++;
+
+	this.playerSatIn(seat);
+};
