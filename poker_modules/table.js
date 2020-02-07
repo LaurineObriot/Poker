@@ -804,3 +804,13 @@ Table.prototype.stopGame = function() {
 	this.gameIsOn = false;
 	this.emitEvent( 'gameStopped', this.public );
 };
+
+/**
+* Logs the last event
+*/
+Table.prototype.log = function(log) {
+	this.public.log = null;
+	this.public.log = log;
+}
+
+module.exports = Table;
