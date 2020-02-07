@@ -789,3 +789,18 @@ Table.prototype.endRound = function() {
 		this.initializeRound();
 	}
 };
+
+/**
+ * Method that stops the game
+ */
+Table.prototype.stopGame = function() {
+	this.public.phase = null;
+	this.pot.reset();
+	this.public.activeSeat = null;
+	this.public.board = ['', '', '', '', ''];
+	this.public.activeSeat = null;
+	this.lastPlayerToAct = null;
+	this.removeAllCardsFromPlay();
+	this.gameIsOn = false;
+	this.emitEvent( 'gameStopped', this.public );
+};
