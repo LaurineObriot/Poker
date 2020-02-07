@@ -731,3 +731,20 @@ Table.prototype.playerSatOut = function( seat, playerLeft ) {
 	}
 	this.emitEvent( 'table-data', this.public );
 };
+
+/*
+* When a player all in
+*/
+Table.prototype.otherPlayersAreAllIn = function() {
+	var currentPlayer = this.public.activeSeat;
+	var playersAllIn = 0;
+	for( var i=0 ; i<this.playersInHandCount ; i++ ) {
+		if( this.seats[currentPlayer].public.chipsInPlay === 0 ) {
+			playersAllIn++;
+		}
+		currentPlayer = this.findNextPlayer( currentPlayer );
+	}
+
+	// In this case, all the players are all in. There should be no actions. Move to the next round.
+	return playersAllIn >= this.playersInHandCount-1;
+};
