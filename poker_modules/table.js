@@ -628,7 +628,7 @@ Table.prototype.playerSatIn = function(seat) {
 /**
  * Changes the data of the table when a player leaves
  * @param int seat
- */
+*/
 Table.prototype.playerLeft = function(seat) {
 	this.log ({
 		message: this.seats[seat].public.name + ' left',
@@ -676,75 +676,89 @@ Table.prototype.playerLeft = function(seat) {
 * @param int seat 			(the number of the sit)
 * @param bool playerLeft 	(flag that shows that the player actually left the table)
 */
-Table.prototype.playerSatOut = function( seat, playerLeft ) {
+Table.prototype.playerSatOut = function(seat, playerLeft) {
 	// Set the playerLeft parameter to false if it's not specified
-	if( typeof playerLeft == 'undefined' ) {
+	if (typeof playerLeft == 'undefined') {
 		playerLeft = false;
 	}
 
 	// If the player didn't leave, log the action as "player sat out"
-	if( !playerLeft ) {
-		this.log({
+	if (!playerLeft) {
+		this.log ({
 			message: this.seats[seat].public.name + ' sat out',
 			action: '',
 			seat: '',
 			notification: ''
 		});
-		this.emitEvent( 'table-data', this.public );
+		this.emitEvent('table-data', this.public);
 	}
 
 	// If the player had betted, add the bets to the pot
-	if( this.seats[seat].public.bet ) {
-		this.pot.addPlayersBets( this.seats[seat] );
+	if (this.seats[seat].public.bet) {
+		this.pot.addPlayersBets(this.seats[seat]);
 	}
-	this.pot.removePlayer( this.public.activeSeat );
+	this.pot.removePlayer(this.public.activeSeat);
 
 	var nextAction = '';
 	this.playersSittingInCount--;
 
-	if( this.seats[seat].public.inHand ) {
+	if (this.seats[seat].public.inHand) {
 		this.seats[seat].sitOut();
 		this.playersInHandCount--;
 
-		if( this.playersInHandCount < 2 ) {
-			if( !playerLeft ) {
+		if (this.playersInHandCount < 2) {
+			if (!playerLeft) {
 				this.endRound();
 			}
 		} else {
 			// If the player was not the last player to act but they were the player who should act in this round
-			if( this.public.activeSeat === seat && this.lastPlayerToAct !== seat ) {
+			if (this.public.activeSeat === seat && this.lastPlayerToAct !== seat) {
 				this.actionToNextPlayer();
 			}
 			// If the player was the last player to act and they left when they had to act
-			else if( this.lastPlayerToAct === seat && this.public.activeSeat === seat ) {
-				if( !playerLeft ) {
+			else if (this.lastPlayerToAct === seat && this.public.activeSeat === seat) {
+				if (!playerLeft) {
 					this.endPhase();
 				}
 			}
 			// If the player was the last to act but not the player who should act
-			else if ( this.lastPlayerToAct === seat ) {
+			else if (this.lastPlayerToAct === seat) {
 				this.lastPlayerToAct = this.findPreviousPlayer( this.lastPlayerToAct );
 			}
 		}
 	} else {
 		this.seats[seat].sitOut();
 	}
-	this.emitEvent( 'table-data', this.public );
+	this.emitEvent('table-data', this.public);
 };
 
 /*
-* When a player all in
+* Check if the player are all in
 */
 Table.prototype.otherPlayersAreAllIn = function() {
 	var currentPlayer = this.public.activeSeat;
 	var playersAllIn = 0;
-	for( var i=0 ; i<this.playersInHandCount ; i++ ) {
-		if( this.seats[currentPlayer].public.chipsInPlay === 0 ) {
+	for (var i = 0; i < this.playersInHandCount; i++) {
+		if (this.seats[currentPlayer].public.chipsInPlay === 0) {
 			playersAllIn++;
 		}
-		currentPlayer = this.findNextPlayer( currentPlayer );
+		currentPlayer = this.findNextPlayer(currentPlayer);
 	}
 
 	// In this case, all the players are all in. There should be no actions. Move to the next round.
-	return playersAllIn >= this.playersInHandCount-1;
+	return playersAllIn >= this.playersInHandCount - 1;
+};
+
+/**
+ * Method that makes the doubly linked list of players
+ */
+Table.prototype.removeAllCardsFromPlay = function() {
+	// For each seat
+	for (var i = 0; i < this.public.seatsCount; i++) {
+		// If a player is sitting on the current seat
+		if (this.seats[i] !== null) {
+			this.seats[i].cards = [];
+			this.seats[i].public.hasCards = false;
+		}
+	}
 };
