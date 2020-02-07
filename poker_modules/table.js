@@ -762,3 +762,30 @@ Table.prototype.removeAllCardsFromPlay = function() {
 		}
 	}
 };
+
+/**
+ * Actions that should be taken when the round has ended
+ */
+Table.prototype.endRound = function() {
+	// If there were any bets, they are added to the pot
+	this.pot.addTableBets(this.seats);
+	if (!this.pot.isEmpty()) {
+		var winnersSeat = this.findNextPlayer(0);
+		this.pot.giveToWinner( this.seats[winnersSeat] );
+	}
+
+	// Sitting out the players who don't have chips
+	for (i = 0; i < this.public.seatsCount; i++) {
+		if (this.seats[i] !== null && this.seats[i].public.chipsInPlay <= 0 && this.seats[i].public.sittingIn ) {
+			this.seats[i].sitOut();
+			this.playersSittingInCount--;
+		}
+	}
+
+	// If there are not enough players to continue the game, stop it
+	if (this.playersSittingInCount < 2) {
+		this.stopGame();
+	} else {
+		this.initializeRound();
+	}
+};
