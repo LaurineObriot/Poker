@@ -670,3 +670,64 @@ Table.prototype.playerLeft = function(seat) {
 		}
 	}
 };
+
+/**
+* Changes the data of the table when a player sits out
+* @param int seat 			(the number of the sit)
+* @param bool playerLeft 	(flag that shows that the player actually left the table)
+*/
+Table.prototype.playerSatOut = function( seat, playerLeft ) {
+	// Set the playerLeft parameter to false if it's not specified
+	if( typeof playerLeft == 'undefined' ) {
+		playerLeft = false;
+	}
+
+	// If the player didn't leave, log the action as "player sat out"
+	if( !playerLeft ) {
+		this.log({
+			message: this.seats[seat].public.name + ' sat out',
+			action: '',
+			seat: '',
+			notification: ''
+		});
+		this.emitEvent( 'table-data', this.public );
+	}
+
+	// If the player had betted, add the bets to the pot
+	if( this.seats[seat].public.bet ) {
+		this.pot.addPlayersBets( this.seats[seat] );
+	}
+	this.pot.removePlayer( this.public.activeSeat );
+
+	var nextAction = '';
+	this.playersSittingInCount--;
+
+	if( this.seats[seat].public.inHand ) {
+		this.seats[seat].sitOut();
+		this.playersInHandCount--;
+
+		if( this.playersInHandCount < 2 ) {
+			if( !playerLeft ) {
+				this.endRound();
+			}
+		} else {
+			// If the player was not the last player to act but they were the player who should act in this round
+			if( this.public.activeSeat === seat && this.lastPlayerToAct !== seat ) {
+				this.actionToNextPlayer();
+			}
+			// If the player was the last player to act and they left when they had to act
+			else if( this.lastPlayerToAct === seat && this.public.activeSeat === seat ) {
+				if( !playerLeft ) {
+					this.endPhase();
+				}
+			}
+			// If the player was the last to act but not the player who should act
+			else if ( this.lastPlayerToAct === seat ) {
+				this.lastPlayerToAct = this.findPreviousPlayer( this.lastPlayerToAct );
+			}
+		}
+	} else {
+		this.seats[seat].sitOut();
+	}
+	this.emitEvent( 'table-data', this.public );
+};
