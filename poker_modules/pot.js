@@ -53,3 +53,41 @@ Pot.prototype.addTableBets = function( players ) {
       }
     }
   }
+  // If all the bets are equal, then remove the bets of the players and add
+  // them to the pot as they are
+  if( allBetsAreEqual ) {
+    for( var i in players ) {
+      if( players[i] && players[i].public.bet ) {
+        this.pots[currentPot].amount += players[i].public.bet;
+        players[i].public.bet = 0;
+        if( this.pots[currentPot].contributors.indexOf( players[i].seat ) < 0 ) {
+          this.pots[currentPot].contributors.push( players[i].seat );
+        }
+      }
+    }
+  } else {
+    // If not all the bets are equal, remove from each player's bet the smallest bet
+    // amount of the table, add these bets to the pot and then create a new empty pot
+    // and recursively add the bets that remained, to the new pot
+    for( var i in players ) {
+      if( players[i] && players[i].public.bet ) {
+        this.pots[currentPot].amount += smallestBet;
+        players[i].public.bet = players[i].public.bet - smallestBet;
+        if( this.pots[currentPot].contributors.indexOf( players[i].seat ) < 0 ) {
+          this.pots[currentPot].contributors.push( players[i].seat );
+        }
+      }
+    }
+
+    // Creating a new pot
+    this.pots.push(
+      {
+        amount: 0,
+        contributors: []
+      }
+    );
+
+    // Recursion
+    this.addTableBets( players );
+  }
+}
