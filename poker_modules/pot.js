@@ -91,3 +91,24 @@ Pot.prototype.addTableBets = function( players ) {
     this.addTableBets( players );
   }
 }
+
+/**
+ * Removing a player from all the pots
+ * @param  number   seat
+ */
+Pot.prototype.removePlayer = function( seat ) {
+  var potsCount = this.pots.length;
+  for( var i=0 ; i<potsCount ; i++ ) {
+    var placeInArray = this.pots[i].contributors.indexOf( seat );
+    if( placeInArray >= 0 ) {
+      this.pots[i].contributors.splice( placeInArray, 1 );
+    }
+  }
+}
+
+Pot.prototype.isEmpty = function() {
+  return !this.pots[0].amount;
+}
+
+
+module.exports = Pot;
