@@ -14,3 +14,12 @@ var Pot = function() {
     }
   ];
 };
+
+/**
+ * Method that resets the pot to its initial state
+ */
+Pot.prototype.reset = function() {
+  this.pots.length = 1;
+  this.pots[0].amount = 0;
+  this.pots[0].contributors = [];
+};
