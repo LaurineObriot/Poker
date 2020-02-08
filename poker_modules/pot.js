@@ -93,6 +93,25 @@ Pot.prototype.addTableBets = function( players ) {
 }
 
 /**
+ * Method that gives the pot to the winner, if the winner is already known
+ * (e.g. everyone has folded)
+ * @param object  winner
+ */
+Pot.prototype.giveToWinner = function( winner ) {
+  var potsCount = this.pots.length;
+  var totalAmount = 0;
+
+  for( var i=potsCount-1 ; i>=0 ; i-- ) {
+    winner.public.chipsInPlay += this.pots[i].amount;
+    totalAmount += this.pots[i].amount;
+  }
+
+  this.reset();
+  return winner.public.name + ' wins the pot (' + totalAmount + ')';
+}
+
+
+/**
  * Removing a player from all the pots
  * @param  number   seat
  */
