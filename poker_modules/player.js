@@ -67,4 +67,14 @@ Player.prototype.sit_out = function() {
 	}
 }
 
+/**
+ * The action of folding the hand
+ */
+Player.prototype.fold = function() {
+	// The player has no cards now
+	this.cards = [];
+	this.public.hasCards = false;
+    this.public.inHand = false;
+}
+
 module.exports = Player;
