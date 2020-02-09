@@ -93,6 +93,22 @@ Pot.prototype.addTableBets = function( players ) {
 }
 
 /**
+ * Adds the player's bets to the pot
+ * @param {[type]} player [description]
+ */
+Pot.prototype.addPlayersBets = function( player ) {
+  // Getting the current pot (the one in which new bets should be added)
+  var currentPot = this.pots.length-1;
+
+  this.pots[currentPot].amount += player.public.bet;
+  player.public.bet = 0;
+  // If the player is not in the list of contributors, add them
+  if( !this.pots[currentPot].contributors.indexOf( player.seat ) ) {
+    this.pots[currentPot].contributors.push( player.seat );
+  }
+}
+
+/**
  * Method that gives the pot to the winner, if the winner is already known
  * (e.g. everyone has folded)
  * @param object  winner
