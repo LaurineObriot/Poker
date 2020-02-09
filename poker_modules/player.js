@@ -90,4 +90,17 @@ Player.prototype.bet = function( amount ) {
     this.public.bet += +amount;
 }
 
+/**
+ * The action of raising
+ * @param number amount
+ */
+Player.prototype.raise = function( amount ) {
+    amount = parseInt(amount);
+    if( amount > this.public.chipsInPlay ) {
+        amount = this.public.chipsInPlay;
+    }
+    this.public.chipsInPlay -= amount;
+    this.public.bet += +amount;
+}
+
 module.exports = Player;
