@@ -103,4 +103,17 @@ Player.prototype.raise = function( amount ) {
     this.public.bet += +amount;
 }
 
+/**
+ * Resets the player's round data
+ */
+Player.prototype.prepareForNewRound = function() {
+    this.cards = [];
+    this.public.cards = [];
+    this.public.hasCards = false;
+    this.public.bet = 0;
+    this.public.inHand = true;
+    this.evaluatedHand = {};
+}
+
+
 module.exports = Player;
