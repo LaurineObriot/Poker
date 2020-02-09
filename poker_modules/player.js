@@ -77,4 +77,17 @@ Player.prototype.fold = function() {
     this.public.inHand = false;
 }
 
+/**
+ * The action of betting
+ * @param number amount
+ */
+Player.prototype.bet = function( amount ) {
+    amount = parseInt(amount);
+    if( amount > this.public.chipsInPlay ) {
+        amount = this.public.chipsInPlay;
+    }
+    this.public.chipsInPlay -= amount;
+    this.public.bet += +amount;
+}
+
 module.exports = Player;
