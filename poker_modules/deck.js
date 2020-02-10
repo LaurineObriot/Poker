@@ -24,18 +24,18 @@ Deck.prototype.shuffle = function(){
   this.nextCard = 0;
   var shuffledDeck = [];
 
-  for( var i=0 ; i<52 ; i++ ) {
-      var random_card = this.cards.splice( Math.floor( Math.random() * this.cards.length ), 1 );
-      shuffledDeck = shuffledDeck.concat( random_card );
+  for (var i = 0; i < 52; i++) {
+      var random_card = this.cards.splice(Math.floor(Math.random() * this.cards.length), 1);
+      shuffledDeck = shuffledDeck.concat(random_card);
   }
   this.cards = shuffledDeck;
 };
 
 // Method that returns the next x cards of the deck
-Deck.prototype.deal = function( numberOfCards ) {
+Deck.prototype.deal = function(numberOfCards) {
   var dealtCards = [];
-  for( var i=0 ; i<numberOfCards && this.nextCard<52 ; i++ ) {
-    dealtCards.push( this.cards[this.nextCard] );
+  for (var i = 0; i < numberOfCards && this.nextCard < 52; i++) {
+    dealtCards.push(this.cards[this.nextCard]);
     this.nextCard++;
   }
   return dealtCards;
