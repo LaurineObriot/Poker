@@ -5,3 +5,9 @@ var eventEmitter = function( tableId ) {
 	return function ( eventName, eventData ) {
 	}
 }
+
+var socket = {
+	emit: function() {
+		return;
+	}
+};
