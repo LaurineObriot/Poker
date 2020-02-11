@@ -31,3 +31,36 @@ function initializeTestTable() {
 
 		return table;
 }
+
+describe("Posting the small blind", function() {
+
+	var table;
+
+ 	beforeEach(function() {
+		table = initializeTestTable();
+	});
+
+	it("should make the next player active", function() {
+		if( table.public.activeSeat === 2 ) {
+			table.playerPostedSmallBlind();
+    		expect( table.public.activeSeat ).toEqual( 6 );
+		} else {
+			table.playerPostedSmallBlind();
+    		expect( table.public.activeSeat ).toEqual( 2 );
+		}
+	});
+
+	it("should not affect the players sitting out", function() {
+		table.playerPostedSmallBlind();
+		var currentPlayer = table.public.activeSeat;
+		for( var i=0 ; i<table.playersSeatedCount ; i++ ) {
+			table.findNextPlayer();
+		}
+    	expect( table.public.activeSeat ).toEqual( currentPlayer );
+	});
+
+	it("should proceed to the big blind phase", function() {
+		table.playerPostedSmallBlind();
+    	expect( table.public.phase ).toEqual( 'bigBlind' );
+	});
+});
