@@ -218,3 +218,62 @@ div.dealer_wrap {
 		z-index: 1;
 	}
 }
+
+/* Portrait tablet to landscape and desktop */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+	#content {
+		width: 768px;
+		height: 576px;
+	}
+
+	body {
+		font-size: 0.75em;
+	}
+
+	div.player-wrap {
+		margin: 34% auto 0;
+		.player-cards {
+			left: 17px;
+			height: 50px;
+			&.dealt {
+				top: -50px;
+			}
+		}
+	}
+
+	.card {
+		background-size: 900px auto;
+		width: 61px;
+		height: 93px;
+	}
+
+	.bets {
+		font-size: 1.2em;
+	}
+
+	div#chat div#messages {
+		height: 76px;
+	}
+
+	div#chat input[type="text"] {
+		width: 137px;
+		font-size: 1.3em;
+		padding: 8px;
+	}
+
+	div#chat input[type="submit"] {
+		transform: translate(0px, -2px);
+		padding: 7px 8px;
+	}
+
+	#pot {
+		font-size: 1.3em;
+	}
+
+	.modal-wrap .modal {
+		width: 320px;
+	}
+
+	#developer-info {
+		font-size: 1em;
+	}
