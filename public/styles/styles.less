@@ -219,6 +219,48 @@ div.dealer_wrap {
 	}
 }
 
+div.player-wrap {
+	width: 64%;
+	margin: 36% auto 0;
+	position: relative;
+	&.top {
+		margin-top: 45%;
+	}
+	&.bottom {
+		margin-top: 22%;
+	}
+	&.left {
+		margin-left: 30%;
+	}
+	&.right {
+		margin-left: 8%;
+	}
+	&.side {
+		margin-top: 32%;
+	}
+
+	.player-cards {
+		overflow: hidden;
+	    height: 60px;
+	    left: 32px;
+	    position: absolute;
+	    top: 0px;
+	    width: 100px;
+	    -webkit-transition: top 0.4s ease;
+    	transition: top 0.4s ease;
+	    &.dealt {
+	    	top: -60px;
+	    }
+	    .card:first-child {
+	    	left: 0;
+	    }
+	    .card {
+		    left: 28px;
+		    position: absolute;
+	    }
+	}
+}
+
 div.seat {
 	padding: 10% 0;
 	background-color: @purple;
