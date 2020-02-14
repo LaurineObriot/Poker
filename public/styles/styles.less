@@ -219,6 +219,41 @@ div.dealer_wrap {
 	}
 }
 
+div.seat {
+	padding: 10% 0;
+	background-color: @purple;
+	border: 3px solid @light-purple;
+	border-radius: 5px;
+	color: @light-purple;
+	font-size: 1.4em;
+	font-weight: lighter;
+	text-align: center;
+	position: relative;
+	box-shadow: 0 0 5px 0 @dark-purple;
+	-webkit-transition: box-shadow 0.2s ease, border 0.2s ease;
+    transition: box-shadow 0.2s ease, border 0.2s ease;
+	&.active {
+		color: @lavender;
+		border: 5px solid @lavender;
+		box-shadow: 0 0 5px 0 @lavender;
+	}
+	p {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		margin: 0;
+	}
+	.player-content {
+		span {
+			line-height: 1.2;
+			display: block;
+		}
+		.notification {
+			line-height: 2.4;
+		}
+	}
+}
+
+
 div#board-wrap {
 	margin: 6% 8%;
 	.card {
