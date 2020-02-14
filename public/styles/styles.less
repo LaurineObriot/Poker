@@ -219,6 +219,42 @@ div.dealer_wrap {
 	}
 }
 
+div#chat {
+	div#messages {
+		border: 1px solid;
+	    border-radius: 8px;
+	    height: 120px;
+	    margin: 8px 8px 0 8px;
+	    background-color: #fff;
+	    padding: 8px;
+	    overflow: auto;
+
+	    p {
+	    	margin: 0;
+	    	word-wrap: break-word;
+
+	    	&.log-message {
+	    		color: #A69029;
+	    	}
+	    }
+	}
+	input[type="submit"] {
+		font-size: 1.3em;
+		padding: 5px 8px;
+		margin: 1px 0 0 2px;
+	    background-color: rgba(46, 31, 62, 0.9);
+	    border-radius: 8px;
+	}
+	input[type="text"] {
+		width: 197px;
+		font-size: 1em;
+		margin: 3px 0 0 8px;
+		padding: 9px;
+		transform: translate(0px, -2px);
+		border-radius: 8px;
+	}
+}
+
 div.player-wrap {
 	width: 64%;
 	margin: 36% auto 0;
