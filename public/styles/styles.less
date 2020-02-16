@@ -219,6 +219,31 @@ div.dealer_wrap {
 	}
 }
 
+button, input[type="submit"], .button {
+	padding: 16px;
+	background-color: rgba(0,0,0,0);
+	border: 1px solid @light-purple;
+	border-radius: 5px;
+	color: @light-purple;
+	font-size: 2em;
+	font-weight: lighter;
+	&.small {
+		font-size: 1em;
+	}
+	&.control-button {
+		padding: 0;
+		height: 65%;
+		width: 85%;
+		background-color: @transparent-purple;
+		border: 3px solid @light-purple;
+		border-radius: 10px;
+		cursor: pointer;
+		&.small {
+			font-size: 1em;
+		}
+	}
+}
+
 h1, h2, h3, h4, h5 {
 	margin-top: 0;
 }
