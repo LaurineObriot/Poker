@@ -219,6 +219,29 @@ div.dealer_wrap {
 	}
 }
 
+div.row {
+	height: 25%;
+	width: 100%;
+	position: relative;
+	z-index: 2;
+	&.controls {
+		background-color: @felt-green;
+		border-radius: 8px;
+		z-index: 1;
+	}
+}
+
+div.cell {
+	float: left;
+	width: 25%;
+	height: 100%;
+	position: relative;
+
+	button {
+		margin: 22.5% 15%;
+	}
+}
+
 div.double-cell {
 	float: left;
 	width: 50%;
