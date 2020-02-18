@@ -1,0 +1,11 @@
+<div class="player-wrap">
+	<div class="player-cards" ng-class="{dealt: player.hasCards}">
+		<div class="card" ng-show="seatOccupied(seatIndex)" ng-class="getCardClass( seatIndex, 0 )"></div>
+		<div class="card" ng-show="seatOccupied(seatIndex)" ng-class="getCardClass( seatIndex, 1 )"></div>
+	</div>
+	
+	<div id="dealer-wrap-{{cellNumber}}" class="dealer-button" ng-show="dealerSeat===seatIndex">D</div>
+	<div id="bets-{{cellNumber}}" class="bets">
+		<span ng-show="player.bet">{{player.bet}}</span>
+	</div>
+</div>
