@@ -78,6 +78,8 @@
 		<div class="cell">
 		<button class="control-button" ng-click="sitIn()" ng-show="$root.sittingOnTable !== null && !$root.sittingIn">Sit In</button>
 		<button class="control-button" ng-click="postBlind(true)" ng-show="actionState === 'postSmallBlind'">Small Blind ({{table.smallBlind}})</button>
-		
+		<button class="control-button" ng-click="postBlind(true)" ng-show="actionState === 'postBigBlind'">Big Blind ({{table.bigBlind}})</button>
+		<button class="control-button" ng-click="check()" ng-show="showCheckButton()">Check</button>
+		<button class="control-button" ng-click="call()" ng-show="showCallButton()">Call {{callAmount()}}</button>
 	</div>
 </div>
