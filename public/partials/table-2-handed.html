@@ -82,4 +82,8 @@
 		<button class="control-button" ng-click="check()" ng-show="showCheckButton()">Check</button>
 		<button class="control-button" ng-click="call()" ng-show="showCallButton()">Call {{callAmount()}}</button>
 	</div>
+	<div class="cell">
+			<button class="control-button" ng-click="bet()" ng-show="showBetButton()">Bet {{betAmount}}</button>
+			<button class="control-button" ng-click="raise()" ng-show="showRaiseButton()">Raise to {{betAmount}}</button>
+		</div>
 </div>
