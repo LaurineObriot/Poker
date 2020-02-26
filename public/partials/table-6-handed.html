@@ -28,4 +28,13 @@
 		</div>
 		<div class="cell"></div>
 	</div>
+	<div class="row">
+		<div class="cell">
+			<seat player="table.seats[5]" active-seat="table.activeSeat" dealer-seat="table.dealerSeat" my-seat="mySeat" my-cards="myCards" sitting-on-table="$root.sittingOnTable" show-buy-in-modal="showBuyInModal(seat)" notifications="notifications" seat-index="5" cell-number="9" class="side"></seat>
+		</div>
+		<div class="double-cell">
+			<div id="pot-wrap">
+				<span id="pot" ng-show="table.pot[0].amount">{{potText()}}</span>
+			</div>
+		
 </div>
