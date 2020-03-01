@@ -28,3 +28,16 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		$scope.buyInAmount = data.table.maxBuyIn;
 		$scope.betAmount = data.table.bigBlind;
 	});
+	// Joining the socket room
+	socket.emit( 'enterRoom', $routeParams.tableId );
+
+	$scope.minBetAmount = function() {
+		if( $scope.mySeat === null || typeof $scope.table.seats[$scope.mySeat] === 'undefined' || $scope.table.seats[$scope.mySeat] === null ) return 0;
+		// If the pot was raised
+		if( $scope.actionState === "actBettedPot" ) {
+			var proposedBet = +$scope.table.biggestBet + $scope.table.bigBlind;
+			return $scope.table.seats[$scope.mySeat].chipsInPlay < proposedBet ? $scope.table.seats[$scope.mySeat].chipsInPlay : proposedBet;
+		} else {
+			return $scope.table.seats[$scope.mySeat].chipsInPlay < $scope.table.bigBlind ? $scope.table.seats[$scope.mySeat].chipsInPlay : $scope.table.bigBlind;
+		}
+	}
