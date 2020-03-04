@@ -64,3 +64,7 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 	$scope.showPostBigBlindButton = function() {
 		return $scope.actionState === "actNotBettedPot" || $scope.actionState === "actBettedPot";
 	}
+
+	$scope.showFoldButton = function() {
+		return $scope.actionState === "actNotBettedPot" || $scope.actionState === "actBettedPot" || $scope.actionState === "actOthersAllIn";
+	}
