@@ -52,11 +52,15 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		var callAmount = +$scope.table.biggestBet - $scope.table.seats[$scope.mySeat].bet;
 		return callAmount > $scope.table.seats[$scope.mySeat].chipsInPlay ? $scope.table.seats[$scope.mySeat].chipsInPlay : callAmount;
 	}
-	
+
 	$scope.showLeaveTableButton = function() {
 		return $rootScope.sittingOnTable !== null && ( !$rootScope.sittingIn || $scope.actionState === "waiting" );
 	}
 
 	$scope.showPostSmallBlindButton = function() {
+		return $scope.actionState === "actNotBettedPot" || $scope.actionState === "actBettedPot";
+	}
+
+	$scope.showPostBigBlindButton = function() {
 		return $scope.actionState === "actNotBettedPot" || $scope.actionState === "actBettedPot";
 	}
