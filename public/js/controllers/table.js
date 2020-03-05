@@ -80,3 +80,7 @@ $scope.showCallButton = function() {
 	$scope.showBetButton = function() {
 		return $scope.actionState === "actNotBettedPot" && $scope.table.seats[$scope.mySeat].chipsInPlay && $scope.table.biggestBet < $scope.table.seats[$scope.mySeat].chipsInPlay;
 	}
+
+	$scope.showRaiseButton = function() {
+		return $scope.actionState === "actBettedPot" && $scope.table.seats[$scope.mySeat].chipsInPlay && $scope.table.biggestBet < $scope.table.seats[$scope.mySeat].chipsInPlay;
+	}
