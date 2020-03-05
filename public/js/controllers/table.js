@@ -92,3 +92,8 @@ $scope.showCallButton = function() {
 $scope.showBetInput = function() {
 	return ($scope.actionState === "actNotBettedPot" || $scope.actionState === "actBettedPot")  && $scope.table.seats[$scope.mySeat].chipsInPlay && $scope.table.biggestBet < $scope.table.seats[$scope.mySeat].chipsInPlay;
 }
+
+$scope.showBuyInModal = function( seat ) {
+	$scope.buyInModalVisible = true;
+	selectedSeat = seat;
+}
