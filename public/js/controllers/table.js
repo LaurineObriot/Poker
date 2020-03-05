@@ -97,3 +97,17 @@ $scope.showBuyInModal = function( seat ) {
 	$scope.buyInModalVisible = true;
 	selectedSeat = seat;
 }
+
+$scope.potText = function() {
+	if( typeof $scope.table.pot !== 'undefined' && $scope.table.pot[0].amount ) {
+		var potText = 'Pot: ' + $scope.table.pot[0].amount;
+
+		var potCount = $scope.table.pot.length;
+		if( potCount > 1 ) {
+			for( var i=1 ; i<potCount ; i++ ) {
+				potText += ' - Sidepot: ' + $scope.table.pot[i].amount;
+			}
+		}
+		return potText;
+	}
+}
