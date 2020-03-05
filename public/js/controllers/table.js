@@ -72,3 +72,7 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 	$scope.showCheckButton = function() {
 	return $scope.actionState === "actNotBettedPot" || ( $scope.actionState === "actBettedPot" && $scope.table.biggestBet == $scope.table.seats[$scope.mySeat].bet );
 }
+
+$scope.showCallButton = function() {
+		return $scope.actionState === "actOthersAllIn" || $scope.actionState === "actBettedPot"  && !( $scope.actionState === "actBettedPot" && $scope.table.biggestBet == $scope.table.seats[$scope.mySeat].bet );
+	}
