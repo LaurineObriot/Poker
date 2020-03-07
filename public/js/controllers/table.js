@@ -134,24 +134,34 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		socket.emit( 'leaveRoom' );
 	};
 
-	// A request to sit on a specific seat on the table
-$scope.sitOnTheTable = function() {
-	socket.emit( 'sitOnTheTable', { 'seat': selectedSeat, 'tableId': $routeParams.tableId, 'chips': $scope.buyInAmount }, function( response ) {
-		if( response.success ){
-			$scope.buyInModalVisible = false;
-			$rootScope.sittingOnTable = $routeParams.tableId;
-			$rootScope.sittingIn = true;
-			$scope.buyInError = null;
-			$scope.mySeat = selectedSeat;
-			$scope.actionState = 'waiting';
-			$scope.$digest();
-		} else {
-			if( response.error ) {
-				$scope.buyInError = response.error;
+		// A request to sit on a specific seat on the table
+	$scope.sitOnTheTable = function() {
+		socket.emit( 'sitOnTheTable', { 'seat': selectedSeat, 'tableId': $routeParams.tableId, 'chips': $scope.buyInAmount }, function( response ) {
+			if( response.success ){
+				$scope.buyInModalVisible = false;
+				$rootScope.sittingOnTable = $routeParams.tableId;
+				$rootScope.sittingIn = true;
+				$scope.buyInError = null;
+				$scope.mySeat = selectedSeat;
+				$scope.actionState = 'waiting';
 				$scope.$digest();
+			} else {
+				if( response.error ) {
+					$scope.buyInError = response.error;
+					$scope.$digest();
+				}
 			}
-		}
-	});
-}
+		});
+	}
+
+	// Sit in the game
+	$scope.sitIn = function() {
+		socket.emit( 'sitIn', function( response ) {
+			if( response.success ) {
+				$rootScope.sittingIn = true;
+				$rootScope.$digest();
+			}
+		});
+	}
 
 }
