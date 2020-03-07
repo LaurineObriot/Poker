@@ -111,3 +111,15 @@ $scope.potText = function() {
 		return potText;
 	}
 }
+
+$scope.getCardClass = function( seat, card ) {
+		if( $scope.mySeat === seat ) {
+			return $scope.myCards[card];
+		}
+		else if ( typeof $scope.table.seats !== 'undefined' && typeof $scope.table.seats[seat] !== 'undefined' && $scope.table.seats[seat] && typeof $scope.table.seats[seat].cards !== 'undefined' && typeof $scope.table.seats[seat].cards[card] !== 'undefined' ) {
+			return 'card-' + $scope.table.seats[seat].cards[card];
+		}
+		else {
+			return 'card-back';
+		}
+	}
