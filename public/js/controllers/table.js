@@ -28,6 +28,7 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		$scope.buyInAmount = data.table.maxBuyIn;
 		$scope.betAmount = data.table.bigBlind;
 	});
+
 	// Joining the socket room
 	socket.emit( 'enterRoom', $routeParams.tableId );
 
@@ -70,10 +71,10 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 	}
 
 	$scope.showCheckButton = function() {
-	return $scope.actionState === "actNotBettedPot" || ( $scope.actionState === "actBettedPot" && $scope.table.biggestBet == $scope.table.seats[$scope.mySeat].bet );
-}
+		return $scope.actionState === "actNotBettedPot" || ( $scope.actionState === "actBettedPot" && $scope.table.biggestBet == $scope.table.seats[$scope.mySeat].bet );
+	}
 
-$scope.showCallButton = function() {
+	$scope.showCallButton = function() {
 		return $scope.actionState === "actOthersAllIn" || $scope.actionState === "actBettedPot"  && !( $scope.actionState === "actBettedPot" && $scope.table.biggestBet == $scope.table.seats[$scope.mySeat].bet );
 	}
 
@@ -86,33 +87,33 @@ $scope.showCallButton = function() {
 	}
 
 	$scope.showBetRange = function() {
-	return ($scope.actionState === "actNotBettedPot" || $scope.actionState === "actBettedPot") && $scope.table.seats[$scope.mySeat].chipsInPlay && $scope.table.biggestBet < $scope.table.seats[$scope.mySeat].chipsInPlay;
-}
-
-$scope.showBetInput = function() {
-	return ($scope.actionState === "actNotBettedPot" || $scope.actionState === "actBettedPot")  && $scope.table.seats[$scope.mySeat].chipsInPlay && $scope.table.biggestBet < $scope.table.seats[$scope.mySeat].chipsInPlay;
-}
-
-$scope.showBuyInModal = function( seat ) {
-	$scope.buyInModalVisible = true;
-	selectedSeat = seat;
-}
-
-$scope.potText = function() {
-	if( typeof $scope.table.pot !== 'undefined' && $scope.table.pot[0].amount ) {
-		var potText = 'Pot: ' + $scope.table.pot[0].amount;
-
-		var potCount = $scope.table.pot.length;
-		if( potCount > 1 ) {
-			for( var i=1 ; i<potCount ; i++ ) {
-				potText += ' - Sidepot: ' + $scope.table.pot[i].amount;
-			}
-		}
-		return potText;
+		return ($scope.actionState === "actNotBettedPot" || $scope.actionState === "actBettedPot") && $scope.table.seats[$scope.mySeat].chipsInPlay && $scope.table.biggestBet < $scope.table.seats[$scope.mySeat].chipsInPlay;
 	}
-}
 
-$scope.getCardClass = function( seat, card ) {
+	$scope.showBetInput = function() {
+		return ($scope.actionState === "actNotBettedPot" || $scope.actionState === "actBettedPot")  && $scope.table.seats[$scope.mySeat].chipsInPlay && $scope.table.biggestBet < $scope.table.seats[$scope.mySeat].chipsInPlay;
+	}
+
+	$scope.showBuyInModal = function( seat ) {
+		$scope.buyInModalVisible = true;
+		selectedSeat = seat;
+	}
+
+	$scope.potText = function() {
+		if( typeof $scope.table.pot !== 'undefined' && $scope.table.pot[0].amount ) {
+			var potText = 'Pot: ' + $scope.table.pot[0].amount;
+
+			var potCount = $scope.table.pot.length;
+			if( potCount > 1 ) {
+				for( var i=1 ; i<potCount ; i++ ) {
+					potText += ' - Sidepot: ' + $scope.table.pot[i].amount;
+				}
+			}
+			return potText;
+		}
+	}
+
+	$scope.getCardClass = function( seat, card ) {
 		if( $scope.mySeat === seat ) {
 			return $scope.myCards[card];
 		}
@@ -122,4 +123,8 @@ $scope.getCardClass = function( seat, card ) {
 		else {
 			return 'card-back';
 		}
+	}
+
+	$scope.seatOccupied = function( seat ) {
+		return !$rootScope.sittingOnTable || ( $scope.table.seats !== 'undefined' && typeof $scope.table.seats[seat] !== 'undefined' && $scope.table.seats[seat] && $scope.table.seats[seat].name );
 	}
