@@ -164,4 +164,18 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
+	// Leave the table (not the room)
+	$scope.leaveTable = function() {
+		socket.emit( 'leaveTable', function( response ) {
+			if( response.success ) {
+				$rootScope.sittingOnTable = null;
+				$rootScope.totalChips = response.totalChips;
+				$rootScope.sittingIn = false;
+				$scope.actionState = '';
+				$rootScope.$digest();
+				$scope.$digest();
+			}
+		});
+	}
+
 }
