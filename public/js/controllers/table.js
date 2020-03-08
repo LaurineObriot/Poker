@@ -211,4 +211,14 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
+		$scope.call = function() {
+		socket.emit( 'call', function( response ) {
+			if( response.success ) {
+				sounds.playCallSound();
+				$scope.actionState = '';
+				$scope.$digest();
+			}
+		});
+	}
+
 }
