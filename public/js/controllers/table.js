@@ -178,4 +178,17 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
+	// Post a blind (or not)
+	$scope.postBlind = function( posted ) {
+		socket.emit( 'postBlind', posted, function( response ) {
+			if( response.success && !posted ) {
+				$rootScope.sittingIn = false;
+			} else {
+				sounds.playBetSound();
+			}
+			$scope.actionState = '';
+			$scope.$digest();
+		});
+	}
+
 }
