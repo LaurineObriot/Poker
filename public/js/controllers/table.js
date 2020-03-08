@@ -201,6 +201,14 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
-	
+		$scope.fold = function() {
+		socket.emit( 'fold', function( response ) {
+			if( response.success ) {
+				sounds.playFoldSound();
+				$scope.actionState = '';
+				$scope.$digest();
+			}
+		});
+	}
 
 }
