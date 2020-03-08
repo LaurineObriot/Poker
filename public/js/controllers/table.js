@@ -191,4 +191,16 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
+		$scope.check = function() {
+		socket.emit( 'check', function( response ) {
+			if( response.success ) {
+				sounds.playCheckSound();
+				$scope.actionState = '';
+				$scope.$digest();
+			}
+		});
+	}
+
+	
+
 }
