@@ -241,4 +241,25 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 	});
 	}
 
+	// When the table data have changed
+	socket.on( 'table-data', function( data ) {
+		$scope.table = data;
+		switch ( data.log.action ) {
+			case 'fold':
+				sounds.playFoldSound();
+				break;
+			case 'check':
+				sounds.playCheckSound();
+				break;
+			case 'call':
+				sounds.playCallSound();
+				break;
+			case 'bet':
+				sounds.playBetSound();
+				break;
+			case 'raise':
+				sounds.playRaiseSound();
+				break;
+		}
+
 }
