@@ -231,4 +231,14 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
+	$scope.raise = function() {
+	socket.emit( 'raise', $scope.betAmount, function( response ) {
+		if( response.success ) {
+			sounds.playRaiseSound();
+			$scope.actionState = '';
+			$scope.$digest();
+		}
+	});
+	}
+
 }
