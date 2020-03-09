@@ -297,4 +297,10 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		$scope.$digest();
 	});
 
+	// When the player is asked to place the big blind
+	socket.on( 'postBigBlind', function( data ) {
+		$scope.actionState = 'postBigBlind';
+		$scope.$digest();
+	});
+
 }
