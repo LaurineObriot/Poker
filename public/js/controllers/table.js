@@ -291,4 +291,10 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		$scope.$digest();
 	});
 
+	// When the player is asked to place the small blind
+	socket.on( 'postSmallBlind', function( data ) {
+		$scope.actionState = 'postSmallBlind';
+		$scope.$digest();
+	});
+
 }
