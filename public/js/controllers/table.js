@@ -284,4 +284,11 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		$scope.$digest();
 	});
 
+	// When the game has stopped
+	socket.on( 'gameStopped', function( data ) {
+		$scope.table = data;
+		$scope.actionState = 'waiting';
+		$scope.$digest();
+	});
+
 }
