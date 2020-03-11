@@ -327,4 +327,10 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		$scope.$digest();
 	});
 
-}
+	// When the user is asked to call an all in
+	socket.on( 'actOthersAllIn', function() {
+		$scope.actionState = 'actOthersAllIn';
+
+		$scope.$digest();
+	});
+}]);
