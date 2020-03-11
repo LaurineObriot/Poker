@@ -134,7 +134,7 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		socket.emit( 'leaveRoom' );
 	};
 
-		// A request to sit on a specific seat on the table
+	// A request to sit on a specific seat on the table
 	$scope.sitOnTheTable = function() {
 		socket.emit( 'sitOnTheTable', { 'seat': selectedSeat, 'tableId': $routeParams.tableId, 'chips': $scope.buyInAmount }, function( response ) {
 			if( response.success ){
@@ -191,7 +191,7 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
-		$scope.check = function() {
+	$scope.check = function() {
 		socket.emit( 'check', function( response ) {
 			if( response.success ) {
 				sounds.playCheckSound();
@@ -201,7 +201,7 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
-		$scope.fold = function() {
+	$scope.fold = function() {
 		socket.emit( 'fold', function( response ) {
 			if( response.success ) {
 				sounds.playFoldSound();
@@ -211,7 +211,7 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
-		$scope.call = function() {
+	$scope.call = function() {
 		socket.emit( 'call', function( response ) {
 			if( response.success ) {
 				sounds.playCallSound();
@@ -221,7 +221,7 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		});
 	}
 
-		$scope.bet = function() {
+	$scope.bet = function() {
 		socket.emit( 'bet', $scope.betAmount, function( response ) {
 			if( response.success ) {
 				sounds.playBetSound();
@@ -232,13 +232,13 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 	}
 
 	$scope.raise = function() {
-	socket.emit( 'raise', $scope.betAmount, function( response ) {
-		if( response.success ) {
-			sounds.playRaiseSound();
-			$scope.actionState = '';
-			$scope.$digest();
-		}
-	});
+		socket.emit( 'raise', $scope.betAmount, function( response ) {
+			if( response.success ) {
+				sounds.playRaiseSound();
+				$scope.actionState = '';
+				$scope.$digest();
+			}
+		});
 	}
 
 	// When the table data have changed
