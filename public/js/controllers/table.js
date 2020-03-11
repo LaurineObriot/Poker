@@ -310,4 +310,13 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		$scope.$digest();
 	});
 
+	// When the user is asked to act and the pot was betted
+	socket.on( 'actBettedPot', function() {
+		$scope.actionState = 'actBettedPot';
+
+		var proposedBet = +$scope.table.biggestBet + $scope.table.bigBlind;
+		$scope.betAmount = $scope.table.seats[$scope.mySeat].chipsInPlay < proposedBet ? $scope.table.seats[$scope.mySeat].chipsInPlay : proposedBet;
+		$scope.$digest();
+	});
+
 }
