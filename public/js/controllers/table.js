@@ -319,4 +319,12 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		$scope.$digest();
 	});
 
+	// When the user is asked to act and the pot was not betted
+	socket.on( 'actNotBettedPot', function() {
+		$scope.actionState = 'actNotBettedPot';
+
+		$scope.betAmount = $scope.table.seats[$scope.mySeat].chipsInPlay < $scope.table.bigBlind ? $scope.table.seats[$scope.mySeat].chipsInPlay : $scope.table.bigBlind;
+		$scope.$digest();
+	});
+
 }
