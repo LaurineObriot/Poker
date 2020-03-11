@@ -303,4 +303,11 @@ function( $scope, $rootScope, $http, $routeParams, $timeout, sounds ) {
 		$scope.$digest();
 	});
 
+	// When the player is dealt cards
+	socket.on( 'dealingCards', function( cards ) {
+		$scope.myCards[0] = 'card-'+cards[0];
+		$scope.myCards[1] = 'card-'+cards[1];
+		$scope.$digest();
+	});
+
 }
