@@ -1,2 +1,2 @@
 # Poker
-Texas Holdem Poker fait avec Python et TKinter
+A Texas Holdem poker application made with node.js, socket.io, and using angularJS
